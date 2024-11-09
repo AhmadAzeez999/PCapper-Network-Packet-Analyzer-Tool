@@ -1,0 +1,376 @@
+﻿<UserControl x:Class="Network_Packet_Analyzer_App.MVVM.View.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Network_Packet_Analyzer_App.MVVM.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="800">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,10"/>
+
+            <TextBlock Text="Captured Packets"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,10"
+                       FontFamily="/Fonts/#Poppins"/>
+            
+            <TextBlock Text="Protocol to filter by:"
+                        Foreground="White"
+                        FontSize="16"
+                        HorizontalAlignment="Left"
+                        Margin="25,0,0,0"
+                        FontFamily="/Fonts/#Poppins"/>  
+
+            <TextBox    Width="250"
+                        Height="40"
+                        VerticalContentAlignment="Center"
+                        HorizontalAlignment="Left"
+                        FontFamily="/Fonts/#Poppins"
+                        Margin="25,0,0,10"
+                        Background="White"
+                        Text="{Binding ProtocolFilter, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Border HorizontalAlignment="Stretch"
+                    Height="300"
+                    Margin="25,0,25,20">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                        <GradientStop Color="#2c2c2c" Offset="0.0"/>
+                        <GradientStop Color="#1a1a1a" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <ListView ItemsSource="{Binding FilteredPackets}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Margin="10"
+                          FontSize="13"
+                          FontFamily="/Fonts/#Poppins">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding Time}"/>
+                            <GridViewColumn Header="Protocol" Width="80" DisplayMemberBinding="{Binding Protocol}"/>
+                            <GridViewColumn Header="Source" Width="150" DisplayMemberBinding="{Binding Source}"/>
+                            <GridViewColumn Header="Destination" Width="150" DisplayMemberBinding="{Binding Destination}"/>
+                            <GridViewColumn Header="Length" Width="80" DisplayMemberBinding="{Binding Length}"/>
+                            <GridViewColumn Header="Info" Width="250" DisplayMemberBinding="{Binding Info}"/>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#3aa0ff"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#404040"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Border>
+
+            <Button Width="80"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Content="Clear"
+                    Command="{Binding ClearPacketListCommand}"
+                    FontFamily="/Fonts/#Poppins"/>
+
+            <Expander Header="DNS Tunneling Detector"
+                      Foreground="White"
+                      FontSize="24"
+                      Margin="0,20,0,20"
+                      BorderThickness="0.2"
+                      BorderBrush="White"
+                      Padding="10">
+                <StackPanel>
+
+                    <TextBlock Text="Suspicious Packets"
+                               Foreground="White"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               Margin="0,20,0,20"
+                               FontFamily="/Fonts/#Poppins"/>
+                    
+                    <Border HorizontalAlignment="Stretch"
+                            Height="300"
+                            Margin="25,0,25,20">    
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                <GradientStop Color="#2c2c2c" Offset="0.0"/>
+                                <GradientStop Color="#1a1a1a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <ListView ItemsSource="{Binding SuspiciousDNSPackets}"
+                                  SelectedItem="{Binding SelectedPacket, Mode=TwoWay}"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Margin="10"
+                                  FontSize="13"
+                                  FontFamily="/Fonts/#Poppins">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding Time}"/>
+                                    <GridViewColumn Header="Protocol" Width="80" DisplayMemberBinding="{Binding Protocol}"/>
+                                    <GridViewColumn Header="Source" Width="150" DisplayMemberBinding="{Binding Source}"/>
+                                    <GridViewColumn Header="Destination" Width="150" DisplayMemberBinding="{Binding Destination}"/>
+                                    <GridViewColumn Header="Length" Width="80" DisplayMemberBinding="{Binding Length}"/>
+                                    <GridViewColumn Header="Info" Width="250" DisplayMemberBinding="{Binding Info}"/>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#3aa0ff"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#404040"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+                    
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Clear"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding ClearSuspiciousDNSPacketListCommand}"/>
+
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Download"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding DownloadDNSPacketsCommand}"/>
+
+                    <TextBlock Text="Flagged Info:"
+                                Foreground="White"
+                                FontSize="20"
+                                HorizontalAlignment="Left"
+                                Margin="0,20,0,20"
+                                FontFamily="/Fonts/#Poppins"/>
+
+                    <TextBox Text="{Binding SelectedReasons}"
+                             Foreground="White"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             FontSize="14"
+                             IsReadOnly="True"
+                             FontFamily="/Fonts/#Poppins"
+                             VerticalAlignment="Top"
+                             Padding="10"
+                             Margin="10"/>
+                </StackPanel>
+            </Expander>
+
+            <Expander Header="HTTPS Tunneling Detector"
+                      Foreground="White"
+                      FontSize="24"
+                      Margin="0,20,0,20"
+                      BorderThickness="0.2"
+                      BorderBrush="White"
+                      Padding="10"> 
+                <StackPanel>
+
+                    <TextBlock  Text="Suspicious Packets"
+                                Foreground="White"
+                                FontSize="20"
+                                HorizontalAlignment="Center"
+                                Margin="0,20,0,20"
+                                FontFamily="/Fonts/#Poppins"/>
+
+                    <Border HorizontalAlignment="Stretch"
+                            Height="300"
+                            Margin="25,0,25,20">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                <GradientStop Color="#2c2c2c" Offset="0.0"/>
+                                <GradientStop Color="#1a1a1a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <ListView ItemsSource="{Binding SuspiciousHTTPPackets}"
+                                  SelectedItem="{Binding SelectedHTTPPacket, Mode=TwoWay}"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Margin="10"
+                                  FontSize="13"
+                                  FontFamily="/Fonts/#Poppins"> 
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding Time}"/>
+                                    <GridViewColumn Header="Protocol" Width="80" DisplayMemberBinding="{Binding Protocol}"/>
+                                    <GridViewColumn Header="Source" Width="150" DisplayMemberBinding="{Binding Source}"/>
+                                    <GridViewColumn Header="Destination" Width="150" DisplayMemberBinding="{Binding Destination}"/>
+                                    <GridViewColumn Header="Length" Width="80" DisplayMemberBinding="{Binding Length}"/>
+                                    <GridViewColumn Header="Info" Width="250" DisplayMemberBinding="{Binding Info}"/>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#3aa0ff"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#404040"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Clear"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding ClearSuspiciousHTTPPacketListCommand}"/>
+
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Download"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding DownloadHTTPSPacketsCommand}"/>
+                    
+                    <TextBlock  Text="Flagged Info:"
+                                Foreground="White"
+                                FontSize="20"
+                                HorizontalAlignment="Left"
+                                Margin="0,20,0,20"
+                                FontFamily="/Fonts/#Poppins"/>
+
+                    <TextBox Text="{Binding SelectedHTTPReasons}"
+                             Foreground="White"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             FontSize="14"
+                             IsReadOnly="True"
+                             FontFamily="/Fonts/#Poppins"
+                             VerticalAlignment="Top"
+                             Padding="10"
+                             Margin="10"/>
+                </StackPanel>
+            </Expander>
+
+            <Expander Header="SSH Tunneling Detector"
+                        Foreground="White"
+                        FontSize="24"
+                        Margin="0,20,0,20"
+                        BorderThickness="0.2"
+                        BorderBrush="White"
+                        Padding="10">
+                <StackPanel>
+
+                    <TextBlock  Text="Suspicious Packets"
+                                Foreground="White"
+                                FontSize="20"
+                                HorizontalAlignment="Center"
+                                Margin="0,20,0,20"
+                                FontFamily="/Fonts/#Poppins"/>
+
+                    <Border HorizontalAlignment="Stretch"
+                            Height="300"
+                            Margin="25,0,25,20">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                <GradientStop Color="#2c2c2c" Offset="0.0"/>
+                                <GradientStop Color="#1a1a1a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <ListView ItemsSource="{Binding SuspiciousSSHPackets}"
+                                  SelectedItem="{Binding SelectedSSHPacket, Mode=TwoWay}"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Margin="10"
+                                  FontSize="13"
+                                  FontFamily="/Fonts/#Poppins">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding Time}"/>
+                                    <GridViewColumn Header="Protocol" Width="80" DisplayMemberBinding="{Binding Protocol}"/>
+                                    <GridViewColumn Header="Source" Width="150" DisplayMemberBinding="{Binding Source}"/>
+                                    <GridViewColumn Header="Destination" Width="150" DisplayMemberBinding="{Binding Destination}"/>
+                                    <GridViewColumn Header="Length" Width="80" DisplayMemberBinding="{Binding Length}"/>
+                                    <GridViewColumn Header="Info" Width="250" DisplayMemberBinding="{Binding Info}"/>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#3aa0ff"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#404040"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+                    
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Clear"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding ClearSuspiciousSSHPacketListCommand}"/>
+
+                    <Button Width="80"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Content="Download"
+                            FontFamily="/Fonts/#Poppins"
+                            FontSize="12"
+                            Command="{Binding DownloadSSHPacketsCommand}"/>
+
+                    <TextBlock Text="Flagged Info:"
+                                  Foreground="White"
+                                  FontSize="20"
+                                  HorizontalAlignment="Left"
+                                  Margin="0,20,0,20"
+                                  FontFamily="/Fonts/#Poppins"/>
+
+                    <TextBox Text="{Binding SelectedSSHReasons}"
+                           Foreground="White"
+                           Background="Transparent"
+                           BorderThickness="0"
+                           FontSize="14"
+                           IsReadOnly="True"
+                           FontFamily="/Fonts/#Poppins"
+                           VerticalAlignment="Top"
+                           Padding="10"
+                           Margin="10"/>
+                </StackPanel>
+            </Expander>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
